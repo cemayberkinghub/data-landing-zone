@@ -232,13 +232,6 @@
         "description": "Specifies the resource ID of the private DNS zone for Sql Server."
       }
     },
-    "privateDnsZoneIdMySqlServer": {
-      "type": "string",
-      "defaultValue": "",
-      "metadata": {
-        "description": "Specifies the resource ID of the private DNS zone for My SQL Server."
-      }
-    },
     "privateDnsZoneIdEventhubNamespace": {
       "type": "string",
       "defaultValue": "",
@@ -6636,34 +6629,6 @@
     "routeTableId": {
       "type": "string",
       "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2022-09-01').outputs.routeTableId.value]"
-    },
-    "mySqlServer001SubscriptionId": {
-      "type": "string",
-      "value": "[split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-metadata', variables('name'))), 'Microsoft.Resources/deployments', 'metadataServices'), '2022-09-01').outputs.mySqlServer001Id.value, '/')[2]]"
-    },
-    "mySqlServer001ResourceGroupName": {
-      "type": "string",
-      "value": "[split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-metadata', variables('name'))), 'Microsoft.Resources/deployments', 'metadataServices'), '2022-09-01').outputs.mySqlServer001Id.value, '/')[4]]"
-    },
-    "mySqlServer001Name": {
-      "type": "string",
-      "value": "[last(split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-metadata', variables('name'))), 'Microsoft.Resources/deployments', 'metadataServices'), '2022-09-01').outputs.mySqlServer001Id.value, '/'))]"
-    },
-    "mySqlServer001KeyVaultid": {
-      "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-metadata', variables('name'))), 'Microsoft.Resources/deployments', 'metadataServices'), '2022-09-01').outputs.keyVault001Id.value]"
-    },
-    "mySqlServer001UsernameSecretName": {
-      "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-metadata', variables('name'))), 'Microsoft.Resources/deployments', 'metadataServices'), '2022-09-01').outputs.mySqlServer001UsernameSecretName.value]"
-    },
-    "mySqlServer001PasswordSecretName": {
-      "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-metadata', variables('name'))), 'Microsoft.Resources/deployments', 'metadataServices'), '2022-09-01').outputs.mySqlServer001PasswordSecretName.value]"
-    },
-    "mySqlServer001ConnectionStringSecretName": {
-      "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-metadata', variables('name'))), 'Microsoft.Resources/deployments', 'metadataServices'), '2022-09-01').outputs.mySqlServer001ConnectionStringSecretName.value]"
     },
     "logAnalyticsWorkspaceKeyVaultId": {
       "type": "string",
