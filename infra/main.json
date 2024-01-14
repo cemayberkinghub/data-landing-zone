@@ -4220,20 +4220,11 @@
           "sqlserverAdminGroupObjectID": {
             "value": ""
           },
-          "mysqlserverAdminGroupName": {
-            "value": ""
-          },
-          "mysqlserverAdminGroupObjectID": {
-            "value": ""
-          },
           "privateDnsZoneIdKeyVault": {
             "value": "[parameters('privateDnsZoneIdKeyVault')]"
           },
           "privateDnsZoneIdSqlServer": {
             "value": "[parameters('privateDnsZoneIdSqlServer')]"
-          },
-          "privateDnsZoneIdMySqlServer": {
-            "value": "[parameters('privateDnsZoneIdMySqlServer')]"
           }
         },
         "template": {
@@ -4274,19 +4265,7 @@
               "type": "string",
               "defaultValue": ""
             },
-            "mysqlserverAdminGroupName": {
-              "type": "string",
-              "defaultValue": ""
-            },
-            "mysqlserverAdminGroupObjectID": {
-              "type": "string",
-              "defaultValue": ""
-            },
             "privateDnsZoneIdSqlServer": {
-              "type": "string",
-              "defaultValue": ""
-            },
-            "privateDnsZoneIdMySqlServer": {
               "type": "string",
               "defaultValue": ""
             },
@@ -4297,60 +4276,9 @@
           },
           "variables": {
             "keyVault001Name": "[format('{0}-vault001', parameters('prefix'))]",
-            "keyVault002Name": "[format('{0}-vault002', parameters('prefix'))]",
-            "sqlServer001Name": "[format('{0}-sqlserver001', parameters('prefix'))]",
-            "mySqlServer001Name": "[format('{0}-mysqlserver001', parameters('prefix'))]",
-            "mySqlServer001UsernameSecretName": "[format('{0}Username', variables('mySqlServer001Name'))]",
-            "mySqlServer001PasswordSecretName": "[format('{0}Password', variables('mySqlServer001Name'))]",
-            "mySqlServer001ConnectionStringSecretName": "[format('{0}ConnectionString', variables('mySqlServer001Name'))]"
+            "sqlServer001Name": "[format('{0}-sqlserver001', parameters('prefix'))]"
           },
           "resources": [
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2021-04-01-preview",
-              "name": "[format('{0}/{1}', variables('keyVault002Name'), variables('mySqlServer001UsernameSecretName'))]",
-              "properties": {
-                "attributes": {
-                  "enabled": true
-                },
-                "contentType": "text/plain",
-                "value": "[parameters('administratorUsername')]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', 'keyVault002')]"
-              ]
-            },
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2021-04-01-preview",
-              "name": "[format('{0}/{1}', variables('keyVault002Name'), variables('mySqlServer001PasswordSecretName'))]",
-              "properties": {
-                "attributes": {
-                  "enabled": true
-                },
-                "contentType": "text/plain",
-                "value": "[parameters('administratorPassword')]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', 'keyVault002')]"
-              ]
-            },
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2021-04-01-preview",
-              "name": "[format('{0}/{1}', variables('keyVault002Name'), variables('mySqlServer001ConnectionStringSecretName'))]",
-              "properties": {
-                "attributes": {
-                  "enabled": true
-                },
-                "contentType": "text/plain",
-                "value": "[format('jdbc:mysql://{0}.mysql.database.azure.com:3306/{1}?useSSL=true&requireSSL=false&enabledSslProtocolSuites=TLSv1.2', variables('mySqlServer001Name'), reference(resourceId('Microsoft.Resources/deployments', 'mysqlserver001'), '2022-09-01').outputs.mySqlServerDatabaseName.value)]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', 'keyVault002')]",
-                "[resourceId('Microsoft.Resources/deployments', 'mysqlserver001')]"
-              ]
-            },
             {
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2022-09-01",
@@ -4372,154 +4300,6 @@
                   },
                   "keyvaultName": {
                     "value": "[variables('keyVault001Name')]"
-                  },
-                  "privateDnsZoneIdKeyVault": {
-                    "value": "[parameters('privateDnsZoneIdKeyVault')]"
-                  }
-                },
-                "template": {
-                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-                  "contentVersion": "1.0.0.0",
-                  "metadata": {
-                    "_generator": {
-                      "name": "bicep",
-                      "version": "0.16.2.56959",
-                      "templateHash": "557008268887196990"
-                    }
-                  },
-                  "parameters": {
-                    "location": {
-                      "type": "string"
-                    },
-                    "tags": {
-                      "type": "object"
-                    },
-                    "subnetId": {
-                      "type": "string"
-                    },
-                    "keyvaultName": {
-                      "type": "string"
-                    },
-                    "privateDnsZoneIdKeyVault": {
-                      "type": "string",
-                      "defaultValue": ""
-                    }
-                  },
-                  "variables": {
-                    "keyVaultPrivateEndpointName": "[format('{0}-private-endpoint', parameters('keyvaultName'))]"
-                  },
-                  "resources": [
-                    {
-                      "type": "Microsoft.KeyVault/vaults",
-                      "apiVersion": "2021-04-01-preview",
-                      "name": "[parameters('keyvaultName')]",
-                      "location": "[parameters('location')]",
-                      "tags": "[parameters('tags')]",
-                      "properties": {
-                        "accessPolicies": [],
-                        "createMode": "default",
-                        "enabledForDeployment": false,
-                        "enabledForDiskEncryption": false,
-                        "enabledForTemplateDeployment": false,
-                        "enablePurgeProtection": true,
-                        "enableRbacAuthorization": true,
-                        "enableSoftDelete": true,
-                        "networkAcls": {
-                          "bypass": "AzureServices",
-                          "defaultAction": "Deny",
-                          "ipRules": [],
-                          "virtualNetworkRules": []
-                        },
-                        "sku": {
-                          "family": "A",
-                          "name": "standard"
-                        },
-                        "softDeleteRetentionInDays": 7,
-                        "tenantId": "[subscription().tenantId]"
-                      }
-                    },
-                    {
-                      "type": "Microsoft.Network/privateEndpoints",
-                      "apiVersion": "2020-11-01",
-                      "name": "[variables('keyVaultPrivateEndpointName')]",
-                      "location": "[parameters('location')]",
-                      "tags": "[parameters('tags')]",
-                      "properties": {
-                        "manualPrivateLinkServiceConnections": [],
-                        "privateLinkServiceConnections": [
-                          {
-                            "name": "[variables('keyVaultPrivateEndpointName')]",
-                            "properties": {
-                              "groupIds": [
-                                "vault"
-                              ],
-                              "privateLinkServiceId": "[resourceId('Microsoft.KeyVault/vaults', parameters('keyvaultName'))]",
-                              "requestMessage": ""
-                            }
-                          }
-                        ],
-                        "subnet": {
-                          "id": "[parameters('subnetId')]"
-                        }
-                      },
-                      "dependsOn": [
-                        "[resourceId('Microsoft.KeyVault/vaults', parameters('keyvaultName'))]"
-                      ]
-                    },
-                    {
-                      "condition": "[not(empty(parameters('privateDnsZoneIdKeyVault')))]",
-                      "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
-                      "apiVersion": "2020-11-01",
-                      "name": "[format('{0}/{1}', variables('keyVaultPrivateEndpointName'), 'default')]",
-                      "properties": {
-                        "privateDnsZoneConfigs": [
-                          {
-                            "name": "[format('{0}-arecord', variables('keyVaultPrivateEndpointName'))]",
-                            "properties": {
-                              "privateDnsZoneId": "[parameters('privateDnsZoneIdKeyVault')]"
-                            }
-                          }
-                        ]
-                      },
-                      "dependsOn": [
-                        "[resourceId('Microsoft.Network/privateEndpoints', variables('keyVaultPrivateEndpointName'))]"
-                      ]
-                    }
-                  ],
-                  "outputs": {
-                    "keyvaultId": {
-                      "type": "string",
-                      "value": "[resourceId('Microsoft.KeyVault/vaults', parameters('keyvaultName'))]"
-                    },
-                    "keyVaultName": {
-                      "type": "string",
-                      "value": "[parameters('keyvaultName')]"
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2022-09-01",
-              "name": "keyVault002",
-              "properties": {
-                "expressionEvaluationOptions": {
-                  "scope": "inner"
-                },
-                "mode": "Incremental",
-                "parameters": {
-                  "location": {
-                    "value": "[parameters('location')]"
-                  },
-                  "tags": {
-                    "value": "[parameters('tags')]"
-                  },
-                  "subnetId": {
-                    "value": "[parameters('subnetId')]"
-                  },
-                  "keyvaultName": {
-                    "value": "[variables('keyVault002Name')]"
                   },
                   "privateDnsZoneIdKeyVault": {
                     "value": "[parameters('privateDnsZoneIdKeyVault')]"
@@ -4854,232 +4634,9 @@
                   }
                 }
               }
-            },
-            {
-              "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2022-09-01",
-              "name": "mysqlserver001",
-              "properties": {
-                "expressionEvaluationOptions": {
-                  "scope": "inner"
-                },
-                "mode": "Incremental",
-                "parameters": {
-                  "location": {
-                    "value": "[parameters('location')]"
-                  },
-                  "tags": {
-                    "value": "[parameters('tags')]"
-                  },
-                  "subnetId": {
-                    "value": "[parameters('subnetId')]"
-                  },
-                  "mysqlserverName": {
-                    "value": "[variables('mySqlServer001Name')]"
-                  },
-                  "administratorUsername": {
-                    "value": "[parameters('administratorUsername')]"
-                  },
-                  "administratorPassword": {
-                    "value": "[parameters('administratorPassword')]"
-                  },
-                  "mysqlserverAdminGroupName": {
-                    "value": "[parameters('mysqlserverAdminGroupName')]"
-                  },
-                  "mysqlserverAdminGroupObjectID": {
-                    "value": "[parameters('mysqlserverAdminGroupObjectID')]"
-                  },
-                  "privateDnsZoneIdMySqlServer": {
-                    "value": "[parameters('privateDnsZoneIdMySqlServer')]"
-                  }
-                },
-                "template": {
-                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-                  "contentVersion": "1.0.0.0",
-                  "metadata": {
-                    "_generator": {
-                      "name": "bicep",
-                      "version": "0.16.2.56959",
-                      "templateHash": "14230358807940564957"
-                    }
-                  },
-                  "parameters": {
-                    "location": {
-                      "type": "string"
-                    },
-                    "mysqlserverName": {
-                      "type": "string"
-                    },
-                    "tags": {
-                      "type": "object"
-                    },
-                    "subnetId": {
-                      "type": "string"
-                    },
-                    "administratorUsername": {
-                      "type": "string",
-                      "defaultValue": "SqlServerMainUser"
-                    },
-                    "administratorPassword": {
-                      "type": "securestring"
-                    },
-                    "mysqlserverAdminGroupName": {
-                      "type": "string",
-                      "defaultValue": ""
-                    },
-                    "mysqlserverAdminGroupObjectID": {
-                      "type": "string",
-                      "defaultValue": ""
-                    },
-                    "privateDnsZoneIdMySqlServer": {
-                      "type": "string",
-                      "defaultValue": ""
-                    }
-                  },
-                  "variables": {
-                    "mySqlServerDatabaseName": "HiveMetastoreDb",
-                    "mysqlserverPrivateEndpointName": "[format('{0}-private-endpoint', parameters('mysqlserverName'))]"
-                  },
-                  "resources": [
-                    {
-                      "type": "Microsoft.DBforMySQL/servers",
-                      "apiVersion": "2017-12-01",
-                      "name": "[parameters('mysqlserverName')]",
-                      "location": "[parameters('location')]",
-                      "tags": "[parameters('tags')]",
-                      "identity": {
-                        "type": "SystemAssigned"
-                      },
-                      "sku": {
-                        "name": "GP_Gen5_2",
-                        "tier": "GeneralPurpose",
-                        "family": "Gen5",
-                        "capacity": 2,
-                        "size": "5120"
-                      },
-                      "properties": {
-                        "administratorLogin": "[parameters('administratorUsername')]",
-                        "administratorLoginPassword": "[parameters('administratorPassword')]",
-                        "createMode": "Default",
-                        "infrastructureEncryption": "Disabled",
-                        "minimalTlsVersion": "TLS1_2",
-                        "publicNetworkAccess": "Disabled",
-                        "sslEnforcement": "Enabled",
-                        "storageProfile": {
-                          "backupRetentionDays": 7,
-                          "geoRedundantBackup": "Enabled",
-                          "storageAutogrow": "Enabled",
-                          "storageMB": 5120
-                        },
-                        "version": "5.7"
-                      }
-                    },
-                    {
-                      "type": "Microsoft.DBforMySQL/servers/configurations",
-                      "apiVersion": "2017-12-01",
-                      "name": "[format('{0}/{1}', parameters('mysqlserverName'), 'lower_case_table_names')]",
-                      "properties": {
-                        "value": "2",
-                        "source": "user-override"
-                      },
-                      "dependsOn": [
-                        "[resourceId('Microsoft.DBforMySQL/servers', parameters('mysqlserverName'))]"
-                      ]
-                    },
-                    {
-                      "type": "Microsoft.DBforMySQL/servers/databases",
-                      "apiVersion": "2017-12-01",
-                      "name": "[format('{0}/{1}', parameters('mysqlserverName'), variables('mySqlServerDatabaseName'))]",
-                      "properties": {
-                        "charset": "latin1",
-                        "collation": "latin1_swedish_ci"
-                      },
-                      "dependsOn": [
-                        "[resourceId('Microsoft.DBforMySQL/servers', parameters('mysqlserverName'))]"
-                      ]
-                    },
-                    {
-                      "condition": "[and(not(empty(parameters('mysqlserverAdminGroupName'))), not(empty(parameters('mysqlserverAdminGroupObjectID'))))]",
-                      "type": "Microsoft.DBforMySQL/servers/administrators",
-                      "apiVersion": "2017-12-01",
-                      "name": "[format('{0}/{1}', parameters('mysqlserverName'), 'activeDirectory')]",
-                      "properties": {
-                        "administratorType": "ActiveDirectory",
-                        "login": "[parameters('mysqlserverAdminGroupName')]",
-                        "sid": "[parameters('mysqlserverAdminGroupObjectID')]",
-                        "tenantId": "[subscription().tenantId]"
-                      },
-                      "dependsOn": [
-                        "[resourceId('Microsoft.DBforMySQL/servers', parameters('mysqlserverName'))]"
-                      ]
-                    },
-                    {
-                      "type": "Microsoft.Network/privateEndpoints",
-                      "apiVersion": "2020-11-01",
-                      "name": "[variables('mysqlserverPrivateEndpointName')]",
-                      "location": "[parameters('location')]",
-                      "tags": "[parameters('tags')]",
-                      "properties": {
-                        "manualPrivateLinkServiceConnections": [],
-                        "privateLinkServiceConnections": [
-                          {
-                            "name": "[variables('mysqlserverPrivateEndpointName')]",
-                            "properties": {
-                              "groupIds": [
-                                "mysqlServer"
-                              ],
-                              "privateLinkServiceId": "[resourceId('Microsoft.DBforMySQL/servers', parameters('mysqlserverName'))]",
-                              "requestMessage": ""
-                            }
-                          }
-                        ],
-                        "subnet": {
-                          "id": "[parameters('subnetId')]"
-                        }
-                      },
-                      "dependsOn": [
-                        "[resourceId('Microsoft.DBforMySQL/servers', parameters('mysqlserverName'))]"
-                      ]
-                    },
-                    {
-                      "condition": "[not(empty(parameters('privateDnsZoneIdMySqlServer')))]",
-                      "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
-                      "apiVersion": "2020-11-01",
-                      "name": "[format('{0}/{1}', variables('mysqlserverPrivateEndpointName'), 'default')]",
-                      "properties": {
-                        "privateDnsZoneConfigs": [
-                          {
-                            "name": "[format('{0}-arecord', variables('mysqlserverPrivateEndpointName'))]",
-                            "properties": {
-                              "privateDnsZoneId": "[parameters('privateDnsZoneIdMySqlServer')]"
-                            }
-                          }
-                        ]
-                      },
-                      "dependsOn": [
-                        "[resourceId('Microsoft.Network/privateEndpoints', variables('mysqlserverPrivateEndpointName'))]"
-                      ]
-                    }
-                  ],
-                  "outputs": {
-                    "mySqlServerId": {
-                      "type": "string",
-                      "value": "[resourceId('Microsoft.DBforMySQL/servers', parameters('mysqlserverName'))]"
-                    },
-                    "mySqlServerDatabaseName": {
-                      "type": "string",
-                      "value": "[variables('mySqlServerDatabaseName')]"
-                    }
-                  }
-                }
-              }
             }
           ],
           "outputs": {
-            "keyVault001Id": {
-              "type": "string",
-              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'keyVault001'), '2022-09-01').outputs.keyvaultId.value]"
-            },
             "sqlServer001Id": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Resources/deployments', 'sqlserver001'), '2022-09-01').outputs.sqlServerId.value]"
@@ -5087,22 +4644,6 @@
             "sqlServer001DatabaseName": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Resources/deployments', 'sqlserver001'), '2022-09-01').outputs.sqlServerDatabaseName.value]"
-            },
-            "mySqlServer001Id": {
-              "type": "string",
-              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'mysqlserver001'), '2022-09-01').outputs.mySqlServerId.value]"
-            },
-            "mySqlServer001UsernameSecretName": {
-              "type": "string",
-              "value": "[variables('mySqlServer001UsernameSecretName')]"
-            },
-            "mySqlServer001PasswordSecretName": {
-              "type": "string",
-              "value": "[variables('mySqlServer001PasswordSecretName')]"
-            },
-            "mySqlServer001ConnectionStringSecretName": {
-              "type": "string",
-              "value": "[variables('mySqlServer001ConnectionStringSecretName')]"
             }
           }
         }
