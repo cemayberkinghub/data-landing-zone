@@ -200,10 +200,6 @@
                                                 "message": "Prefix currently unavailable. Please choose a different one."
                                             },
                                             {
-                                                "isValid": "[not(equals(steps('basics').dataLandingZoneName.mySqlServerNameApi.nameAvailable, false))]",
-                                                "message": "Prefix currently unavailable. Please choose a different one."
-                                            },
-                                            {
                                                 "isValid": "[not(equals(steps('basics').dataLandingZoneName.sqlServerNameApi.available, false))]",
                                                 "message": "Prefix currently unavailable. Please choose a different one."
                                             },
@@ -318,18 +314,6 @@
                                         "path": "[concat(steps('basics').deploymentDetails.subscriptionId, '/providers/Microsoft.EventHub/checkNameAvailability?api-version=2017-04-01')]",
                                         "body": {
                                             "name": "[concat(steps('basics').dataLandingZoneName.dataLandingZonePrefix, '-', steps('basics').dataLandingZoneName.environment, '-integration-eventhub001')]"
-                                        }
-                                    }
-                                },
-                                {
-                                    "name": "mySqlServerNameApi",
-                                    "type": "Microsoft.Solutions.ArmApiControl",
-                                    "request": {
-                                        "method": "POST",
-                                        "path": "[concat(steps('basics').deploymentDetails.subscriptionId, '/providers/Microsoft.DBforMySQL/checkNameAvailability?api-version=2017-12-01')]",
-                                        "body": {
-                                            "name": "[concat(steps('basics').dataLandingZoneName.dataLandingZonePrefix, '-', steps('basics').dataLandingZoneName.environment, '-mysqlserver001')]",
-                                            "type": "Microsoft.DBforMySQL"
                                         }
                                     }
                                 },
@@ -1344,23 +1328,6 @@
                                     }
                                 },
                                 {
-                                    "name": "privateDnsZoneIdMySqlServer",
-                                    "label": "Private DNS Zone MySQL Server (privatelink.mysql.database.azure.com)",
-                                    "type": "Microsoft.Common.DropDown",
-                                    "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
-                                    "defaultValue": "",
-                                    "toolTip": "Private DNS Zone for MySQL Server (privatelink.mysql.database.azure.com).",
-                                    "multiselect": false,
-                                    "selectAll": false,
-                                    "filter": true,
-                                    "filterPlaceholder": "Filter items ...",
-                                    "multiLine": true,
-                                    "constraints": {
-                                        "allowedValues": "[map(filter(steps('connectivitySettings').privateDnsZones.privateDnsZonesApi.value,(item) => contains(item.name, 'privatelink.mysql.database.azure.com')),(item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Resource Group: ', last(take(split(item.id, '/'), 5)), '\"}')))]",
-                                        "required": true
-                                    }
-                                },
-                                {
                                     "name": "privateDnsZoneIdNamespace",
                                     "label": "Private DNS Zone EventHub Namespace (privatelink.servicebus.windows.net)",
                                     "type": "Microsoft.Common.DropDown",
@@ -1474,7 +1441,6 @@
                 "privateDnsZoneIdBlob": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdBlob), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdBlob)]",
                 "privateDnsZoneIdDfs": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdDfs), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdDfs)]",
                 "privateDnsZoneIdSqlServer": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdSqlServer), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdSqlServer)]",
-                "privateDnsZoneIdMySqlServer": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdMySqlServer), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdMySqlServer)]",
                 "privateDnsZoneIdEventhubNamespace": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdNamespace), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdNamespace)]",
                 "privateDnsZoneIdSynapseDev": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdSynapseDev), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdSynapseDev)]",
                 "privateDnsZoneIdSynapseSql": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdSynapseSql), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdSynapseSql)]"
