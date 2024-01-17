@@ -15,37 +15,37 @@
             "value": {}
         },
         "vnetAddressPrefix": {
-            "value": "10.1.0.0/16"
+            "value": "10.1.0.0/23"
         },
         "servicesSubnetAddressPrefix": {
-            "value": "10.1.0.0/24"
+            "value": "10.1.0.0/27"
         },
         "databricksIntegrationPublicSubnetAddressPrefix": {
-            "value": "10.1.1.0/24"
+            "value": "10.1.1.0/26"
         },
         "databricksIntegrationPrivateSubnetAddressPrefix": {
-            "value": "10.1.2.0/24"
+            "value": "10.1.1.64/26"
         },
         "databricksProductPublicSubnetAddressPrefix": {
-            "value": "10.1.3.0/24"
+            "value": "10.1.1.128/26"
         },
         "databricksProductPrivateSubnetAddressPrefix": {
-            "value": "10.1.4.0/24"
+            "value": "10.1.1.192/26"
         },
         "powerBiGatewaySubnetAddressPrefix": {
-            "value": "10.1.5.0/24"
+            "value": "10.1.0.32/27"
         },
         "dataIntegration001SubnetAddressPrefix": {
-            "value": "10.1.6.0/24"
+            "value": "10.1.0.64/27"
         },
         "dataIntegration002SubnetAddressPrefix": {
-            "value": "10.1.7.0/24"
+            "value": "10.1.0.96/27"
         },
         "dataProduct001SubnetAddressPrefix": {
-            "value": "10.1.8.0/24"
+            "value": "10.1.0.128/27"
         },
         "dataProduct002SubnetAddressPrefix": {
-            "value": "10.1.9.0/24"
+            "value": "10.1.0.160/27"
         },
         "dataManagementZoneVnetId": {
             "value": "/subscriptions/17588eb2-2943-461a-ab3f-00a3ceac3112/resourceGroups/dmz-dev-network/providers/Microsoft.Network/virtualNetworks/dmz-dev-vnet"
