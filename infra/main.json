@@ -4630,6 +4630,10 @@
             }
           ],
           "outputs": {
+            "keyVault001Id": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'keyVault001'), '2022-09-01').outputs.keyvaultId.value]"
+            },
             "sqlServer001Id": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Resources/deployments', 'sqlserver001'), '2022-09-01').outputs.sqlServerId.value]"
